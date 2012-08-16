@@ -1,0 +1,16 @@
+#!/bin/sh
+: ${CC:=gcc}
+echo "CC=$CC"
+: ${AR:=ar}
+echo "AR=$AR"
+: ${RANLIB:=ranlib}
+echo "RANLIB=$RANLIB"
+: ${CFLAGS:=-O2}
+echo "CFLAGS=$CFLAGS"
+set -v
+LIB=libBlocksRuntime.so
+SRC=BlocksRuntime
+if test -f $LIB; then rm $LIB; fi
+$CC -fpic -c $CFLAGS -o $SRC/data.o $SRC/data.c
+$CC -fpic -c $CFLAGS -Wno-discard-qual -o $SRC/runtime.o -I . $SRC/runtime.c
+gcc -shared -o $LIB $SRC/runtime.o $SRC/data.o
